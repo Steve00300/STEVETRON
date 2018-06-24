@@ -13,12 +13,9 @@ Stevetron.on('message', async message => {
     let cmd = args.shift().toLowerCase();
 
     if (message.member.roles.some(r => ['Little Boi'].includes(r.name))) {
-        // Delete Brendan's YouTube Links
+        message.delete();
+        // Delete Brendan's YouTube Links (Doesn't stop that fag editing it in)
         if (message.content.toLowerCase().replace(/[^a-zA-Z]/g, '').includes('youtube')) {
-            message.delete();
-        }
-        // Delete Brendan's Twitch Links
-        if (message.content.toLowerCase().replace(/[^a-zA-Z]/g, '').includes('twitch')) {
             message.delete();
         }
     }
@@ -26,7 +23,7 @@ Stevetron.on('message', async message => {
     if (message.content.includes(config.prefix)) {
         // Bot Information
         if (cmd === 'help') {
-            return message.channel.send('lmao ur on ur own buddy');
+            return message.channel.send('`lmao ur on ur own buddy`');
         }
 
         // Request Role
@@ -50,6 +47,19 @@ Stevetron.on('message', async message => {
             let sayMessage = args.join(' ');
             message.delete();
             return message.channel.send(sayMessage);
+        }
+
+        // Make Stevetron Talk In Specific Channel (Admin Only)
+        if (cmd === 'message') {
+            if (!message.member.roles.some(r => ['绿'].includes(r.name))) {
+                return message.channel.send(message.author + ' `ERROR: YOU DO NOT HAVE PERMISSION TO USE THIS COMMAND`');
+            }
+
+            // [stevetronguide, stevechat, codemonkeys, antonianrepublic]
+            const channel = ['460044314022510612', '439233768130347010', '458520271360622592', '443367636701544458'];
+
+            let sayMessage = args.slice(1).join(' ');
+            return Stevetron.channels.get(channel[args[0]]).send(sayMessage);
         }
 
         // Random Number
@@ -95,5 +105,3 @@ Stevetron.on('message', async message => {
 });
 
 Stevetron.login(config.token);
-
-// 绿
